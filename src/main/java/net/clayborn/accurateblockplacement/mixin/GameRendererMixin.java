@@ -73,7 +73,7 @@ public abstract class GameRendererMixin
 	{
 		Method[] methods = Block.class.getMethods();
 
-		for (Method method : methods) {
+		for(Method method : methods) {
 			Class<?>[] types = method.getParameterTypes();
 
 			if(types.length != 6) {
@@ -225,8 +225,8 @@ public abstract class GameRendererMixin
 		MinecraftClient client = MinecraftClient.getInstance();
 
 		// safety checks
-		if(client == null || client.options == null || client.options.keyUse == null || client.hitResult == null
-				|| client.player == null || client.world == null || client.mouse == null || client.window == null) {
+		if(client == null || client.options == null || client.options.keyUse == null || client.crosshairTarget == null
+				|| client.player == null || client.world == null || client.mouse == null || client.getWindow() == null) {
 			return;
 		}
 
@@ -249,9 +249,8 @@ public abstract class GameRendererMixin
 			autoRepeatWaitingOnCooldown = true;
 			backFillList.clear();
 
-			if(client.window.getWidth() > 0 && client.window.getHeight() > 0) {
-				lastFreshPressMouseRatio = new Vec3d(client.mouse.getX() / client.window.getWidth(),
-						client.mouse.getY() / client.window.getHeight(), 0);
+			if(client.getWindow().getWidth() > 0 && client.getWindow().getHeight() > 0) {
+				lastFreshPressMouseRatio = new Vec3d(client.mouse.getX() / client.getWindow().getWidth(), client.mouse.getY() / client.getWindow().getHeight(), 0);
 			}
 			else {
 				lastFreshPressMouseRatio = null;
@@ -277,11 +276,11 @@ public abstract class GameRendererMixin
 		}
 
 		// if we aren't looking a block (so we can place), let vanilla take over
-		if(client.hitResult.getType() != HitResult.Type.BLOCK) {
+		if(client.crosshairTarget.getType() != HitResult.Type.BLOCK) {
 			return;
 		}
 
-		BlockHitResult blockHitResult = (BlockHitResult) client.hitResult;
+		BlockHitResult blockHitResult = (BlockHitResult) client.crosshairTarget;
 		BlockPos blockHitPos = blockHitResult.getBlockPos();
 		Boolean isTargetBlockActivatable = doesBlockHaveOverriddenActivateMethod(client.world.getBlockState(blockHitPos).getBlock());
 
@@ -317,8 +316,8 @@ public abstract class GameRendererMixin
 
 			Vec3d currentMouseRatio = null;
 
-			if(client.window.getWidth() > 0 && client.window.getHeight() > 0) {
-				currentMouseRatio = new Vec3d(client.mouse.getX() / client.window.getWidth(), client.mouse.getY() / client.window.getHeight(), 0);
+			if(client.getWindow().getWidth() > 0 && client.getWindow().getHeight() > 0) {
+				currentMouseRatio = new Vec3d(client.mouse.getX() / client.getWindow().getWidth(), client.mouse.getY() / client.getWindow().getHeight(), 0);
 			}
 
 			// Condition:
@@ -350,18 +349,18 @@ public abstract class GameRendererMixin
 					if(autoRepeatWaitingOnCooldown && !freshKeyPress) {
 						autoRepeatWaitingOnCooldown = false;
 
-						HitResult currentHitResult = client.hitResult;
+						HitResult currentHitResult = client.crosshairTarget;
 						
 						// try to place the backlog
 						for(HitResult prevHitResult : backFillList)	{
-							client.hitResult = prevHitResult;
+							client.crosshairTarget = prevHitResult;
 							// use item
 							clientAccessor.accurateblockplacement_DoItemUseBypassDisable();
 						}
 						
 						backFillList.clear();
 						
-						client.hitResult = currentHitResult;
+						client.crosshairTarget = currentHitResult;
 					}
 
 					// always run at least once if we reach here
@@ -409,7 +408,7 @@ public abstract class GameRendererMixin
 				}
 				else if(isPlacementTargetFresh) {
 					// populate the backfill list just in case
-					backFillList.add(client.hitResult);
+					backFillList.add(client.crosshairTarget);
 				}
 			}
 

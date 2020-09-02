@@ -1,13 +1,13 @@
 {
-  "required": true,
-  "package": "net.clayborn.accurateblockplacement.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "client": [
-    "GameRendererMixin",
-	"MinecraftClientMixin",
-	"KeyBindingMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"package": "net.clayborn.accurateblockplacement.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"client": [
+		"GameRendererMixin",
+		"MinecraftClientMixin",
+		"KeyBindingMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }
