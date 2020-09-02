@@ -1,6 +1,6 @@
 # Accurate Block Placement
 
-A simple fabric mod for Minecraft which causes players to place a blocks based on what they are looking at rather than a timer.
+A simple fabric mod for Minecraft which causes players to place blocks based on what they are looking at rather than a timer.
 
 ## Installation
 
