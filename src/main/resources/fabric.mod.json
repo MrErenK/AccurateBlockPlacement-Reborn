@@ -10,7 +10,7 @@
 	],
 	"contact": {
 		"homepage": "https://minecraft.curseforge.com/projects/accurate-block-placement",
-		"sources": "https://github.com/orbwoi/AccurateBlockPlacement"
+		"sources": "https://github.com/Flourick/AccurateBlockPlacement"
 	},
 
 	"license": "MIT",
@@ -23,12 +23,12 @@
 		]
 	},
 	"mixins": [
-	"accurateblockplacement.mixins.json"
+		"accurateblockplacement.mixins.json"
 	],
 
 	"depends": {
-		"minecraft": "1.15.x",
-		"fabricloader": ">=0.7.0",
+		"minecraft": "1.16.x",
+		"fabricloader": ">=0.8.8",
 		"fabric": "*"
 	},
 	"custom": {

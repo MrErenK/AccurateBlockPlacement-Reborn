@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.clayborn.accurateblockplacement.AccurateBlockPlacementMod;
 import net.clayborn.accurateblockplacement.IKeyBindingAccessor;
 import net.clayborn.accurateblockplacement.IMinecraftClientAccessor;
-
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -113,7 +113,7 @@ public abstract class GameRendererMixin
 		// TODO: consider cache of results
 
 		try {
-			return !block.getClass().getMethod(blockActivateMethodName, BlockState.class, World.class, BlockPos.class, PlayerEntity.class, Hand.class, BlockHitResult.class).getDeclaringClass().equals(Block.class);
+			return !block.getClass().getMethod(blockActivateMethodName, BlockState.class, World.class, BlockPos.class, PlayerEntity.class, Hand.class, BlockHitResult.class).getDeclaringClass().equals(AbstractBlock.class);
 		}
 		catch(Exception e) {
 			System.out.println("[ERROR] Unable to find block " + block.getClass().getName() + " activate method!");
@@ -309,7 +309,7 @@ public abstract class GameRendererMixin
 			if(lastPlacedBlockPos != null && lastPlayerPlacedBlockPos != null) {
 				facingAxisPlayerPos = client.player.getPos().getComponentAlongAxis(targetPlacement.getSide().getAxis());
 				facingAxisPlayerLastPos = lastPlayerPlacedBlockPos.getComponentAlongAxis(targetPlacement.getSide().getAxis());
-				facingAxisLastPlacedPos = new Vec3d(lastPlacedBlockPos).getComponentAlongAxis(targetPlacement.getSide().getAxis());
+				facingAxisLastPlacedPos = new Vec3d(lastPlacedBlockPos.getX(), lastPlacedBlockPos.getY(), lastPlacedBlockPos.getZ()).getComponentAlongAxis(targetPlacement.getSide().getAxis());
 			}
 
 			IMinecraftClientAccessor clientAccessor = (IMinecraftClientAccessor) client;
@@ -364,7 +364,7 @@ public abstract class GameRendererMixin
 					}
 
 					// always run at least once if we reach here
-					// if this isn't a freshkey press, turn on the run once flag
+					// if this isn't a fresh key press, turn on the run once flag
 					Boolean runOnceFlag = !freshKeyPress;
 
 					// in case they manage to push the button multiple times per frame
@@ -383,7 +383,7 @@ public abstract class GameRendererMixin
 							}
 							else {
 								// prevent slow rounding error from eventually moving the player out of range
-								Vec3d summedLastPlayerPos = lastPlayerPlacedBlockPos.add(new Vec3d(targetPlacement.getSide().getVector()));
+								Vec3d summedLastPlayerPos = lastPlayerPlacedBlockPos.add(new Vec3d(targetPlacement.getSide().getVector().getX(), targetPlacement.getSide().getVector().getY(), targetPlacement.getSide().getVector().getZ()));
 
 								Vec3d newLastPlayerPlacedPos = null;
 
