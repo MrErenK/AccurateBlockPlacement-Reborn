@@ -6,16 +6,15 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
-import net.minecraft.ChatFormat;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.network.chat.ChatMessageType;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.MessageType;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-public class AccurateBlockPlacementMod implements ModInitializer {
-
+public class AccurateBlockPlacementMod implements ModInitializer
+{
 	// global state
 	public static Boolean  disableNormalItemUse = false;
 	public static boolean  isAccurateBlockPlacementEnabled = true;
@@ -27,43 +26,41 @@ public class AccurateBlockPlacementMod implements ModInitializer {
 	final static String KEY_CATEGORY_NAME = "Accurate Block Placement";
 	
 	@Override
-	public void onInitialize() {
-
+	public void onInitialize()
+	{
 		keyBinding = FabricKeyBinding.Builder.create(
-			    new Identifier("accurateblockplacement", "togglevanillaplacement"),
-			    InputUtil.Type.KEYSYM,
-			    GLFW.GLFW_KEY_UNKNOWN,
-			    KEY_CATEGORY_NAME
-			).build();
+			new Identifier("accurateblockplacement", "togglevanillaplacement"),
+			InputUtil.Type.KEYSYM,
+			GLFW.GLFW_KEY_UNKNOWN,
+			KEY_CATEGORY_NAME
+		).build();
 
 		KeyBindingRegistry.INSTANCE.addCategory(KEY_CATEGORY_NAME);
 		KeyBindingRegistry.INSTANCE.register(keyBinding);
 		
-		ClientTickCallback.EVENT.register(e ->
-		{
+		ClientTickCallback.EVENT.register(e -> {
 			MinecraftClient client = MinecraftClient.getInstance();
+
 			if (client == null || client.inGameHud == null) return;
 			
-		    if(keyBinding.isPressed())
-	    	{
-	    		if (!wasAccurateBlockPlacementToggleKeyPressed)
-	    		{
+		    if(keyBinding.isPressed()) {
+	    		if(!wasAccurateBlockPlacementToggleKeyPressed) {
 	    			isAccurateBlockPlacementEnabled = !isAccurateBlockPlacementEnabled;
 	    			
-	    			TranslatableComponent message = null;
+	    			TranslatableText message = null;
 	    			
-	    			if (isAccurateBlockPlacementEnabled) {
-	    				message = new TranslatableComponent("net.clayborn.accurateblockplacement.modplacementmodemessage");
-	    			} else {
-	    				message = new TranslatableComponent("net.clayborn.accurateblockplacement.vanillaplacementmodemessage");
+	    			if(isAccurateBlockPlacementEnabled) {
+	    				message = new TranslatableText("net.clayborn.accurateblockplacement.modplacementmodemessage");
+					}
+					else {
+	    				message = new TranslatableText("net.clayborn.accurateblockplacement.vanillaplacementmodemessage");
 	    			}
 	    			
-	    			message.setStyle((new Style()).setColor(ChatFormat.DARK_AQUA));
-	    			
-    				client.inGameHud.addChatMessage(ChatMessageType.SYSTEM, message);
+    				client.inGameHud.addChatMessage(MessageType.SYSTEM, message);
 	    		}
 	    		wasAccurateBlockPlacementToggleKeyPressed = true;
-	    	} else {
+			}
+			else {
 	    		wasAccurateBlockPlacementToggleKeyPressed = false;
 	    	}
 		});

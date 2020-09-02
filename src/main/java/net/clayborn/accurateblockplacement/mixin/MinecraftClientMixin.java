@@ -11,10 +11,13 @@ import net.clayborn.accurateblockplacement.IMinecraftClientAccessor;
 import net.minecraft.client.MinecraftClient;
 
 @Mixin(MinecraftClient.class)
-public abstract class MinecraftClientMixin implements IMinecraftClientAccessor {
+public abstract class MinecraftClientMixin implements IMinecraftClientAccessor
+{
+	@Shadow
+	protected abstract void doItemUse();
 
 	@Shadow
-	protected abstract void doItemUse();	
+	private int itemUseCooldown;
 	
 	@Override
 	public void accurateblockplacement_DoItemUseBypassDisable()
@@ -25,17 +28,13 @@ public abstract class MinecraftClientMixin implements IMinecraftClientAccessor {
 		AccurateBlockPlacementMod.disableNormalItemUse = oldValue;
 	}
 	
-	@Inject(method = "doItemUse()V", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
 	void OnDoItemUse(CallbackInfo info)
 	{
-		if (AccurateBlockPlacementMod.disableNormalItemUse)
-		{
+		if(AccurateBlockPlacementMod.disableNormalItemUse) {
 			info.cancel();
 		}
 	}
-		
-	@Shadow
-	private int itemUseCooldown;
 	
 	@Override
 	public void accurateblockplacement_SetItemUseCooldown(int cooldown)

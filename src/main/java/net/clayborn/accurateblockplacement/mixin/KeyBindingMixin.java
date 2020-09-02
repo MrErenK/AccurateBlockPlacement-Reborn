@@ -7,7 +7,8 @@ import net.clayborn.accurateblockplacement.IKeyBindingAccessor;
 import net.minecraft.client.options.KeyBinding;
 
 @Mixin(KeyBinding.class)
-public abstract class KeyBindingMixin implements IKeyBindingAccessor {
+public abstract class KeyBindingMixin implements IKeyBindingAccessor
+{
 	@Shadow
 	private int timesPressed;
 	
