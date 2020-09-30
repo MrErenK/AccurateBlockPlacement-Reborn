@@ -6,7 +6,8 @@
 	"name": "Accurate Block Placement",
 	"description": "Build at super speed with your bare hands!",
 	"authors": [
-		"Clayborn"
+		"Clayborn",
+		"Flourick"
 	],
 	"contact": {
 		"homepage": "https://minecraft.curseforge.com/projects/accurate-block-placement",
@@ -28,7 +29,7 @@
 
 	"depends": {
 		"minecraft": "1.16.x",
-		"fabricloader": ">=0.8.8",
+		"fabricloader": ">=0.9.0",
 		"fabric": "*"
 	},
 	"custom": {
