@@ -17,6 +17,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
@@ -268,7 +269,7 @@ public abstract class GameRendererMixin
 		if(!(currentItem instanceof BlockItem))
 			return;
 
-		Boolean isItemUsable = currentItem.isFood() || doesItemHaveOverriddenUseMethod(currentItem) || doesItemHaveOverriddenUseOnBlockMethod(currentItem);
+		Boolean isItemUsable = (currentItem.isFood() && !(currentItem instanceof AliasedBlockItem)) || doesItemHaveOverriddenUseMethod(currentItem) || doesItemHaveOverriddenUseOnBlockMethod(currentItem);
 
 		// if the item we are holding is activatable, let vanilla take over
 		if(isItemUsable) {
