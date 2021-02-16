@@ -28,6 +28,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.world.World;
 
 @Mixin(GameRenderer.class)
@@ -308,9 +309,16 @@ public abstract class GameRendererMixin
 			double facingAxisLastPlacedPos = 0.0d;
 
 			if(lastPlacedBlockPos != null && lastPlayerPlacedBlockPos != null) {
-				facingAxisPlayerPos = client.player.getPos().getComponentAlongAxis(targetPlacement.getSide().getAxis());
-				facingAxisPlayerLastPos = lastPlayerPlacedBlockPos.getComponentAlongAxis(targetPlacement.getSide().getAxis());
-				facingAxisLastPlacedPos = new Vec3d(lastPlacedBlockPos.getX(), lastPlacedBlockPos.getY(), lastPlacedBlockPos.getZ()).getComponentAlongAxis(targetPlacement.getSide().getAxis());
+				Axis axis = targetPlacement.getSide().getAxis();
+
+				facingAxisPlayerPos = client.player.getPos().getComponentAlongAxis(axis);
+				facingAxisPlayerLastPos = lastPlayerPlacedBlockPos.getComponentAlongAxis(axis);
+				facingAxisLastPlacedPos = new Vec3d(lastPlacedBlockPos.getX(), lastPlacedBlockPos.getY(), lastPlacedBlockPos.getZ()).getComponentAlongAxis(axis);
+
+				// fixes placement being directional becouse getting the correct side pos is apparently too hard
+				if(targetPlacement.getSide().getName().equals("west") || targetPlacement.getSide().getName().equals("north")) {
+					facingAxisLastPlacedPos += 1.0d;
+				}
 			}
 
 			IMinecraftClientAccessor clientAccessor = (IMinecraftClientAccessor) client;
@@ -331,8 +339,8 @@ public abstract class GameRendererMixin
 				&& (lastPlacedBlockPos == null || !lastPlacedBlockPos.equals(blockHitPos)))
 				|| (lastPlacedBlockPos != null && lastPlayerPlacedBlockPos != null
 					&& lastPlacedBlockPos.equals(blockHitPos)
-					&& (Math.abs(facingAxisPlayerLastPos - facingAxisPlayerPos) >= 1.0d
-						&& Math.abs(facingAxisPlayerLastPos - facingAxisLastPlacedPos) < Math.abs(facingAxisPlayerPos - facingAxisLastPlacedPos)));
+					&& Math.abs(facingAxisPlayerLastPos - facingAxisPlayerPos) >= 0.99d // becouse precision
+					&& Math.abs(facingAxisPlayerLastPos - facingAxisLastPlacedPos) < Math.abs(facingAxisPlayerPos - facingAxisLastPlacedPos));
 
 			Boolean hasMouseMoved = (currentMouseRatio != null && lastFreshPressMouseRatio != null && lastFreshPressMouseRatio.distanceTo(currentMouseRatio) >= 0.1);
 
