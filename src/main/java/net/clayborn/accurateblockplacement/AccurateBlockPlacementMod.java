@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.lwjgl.glfw.GLFW;
 
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
@@ -13,7 +13,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.MessageType;
 import net.minecraft.text.TranslatableText;
 
-public class AccurateBlockPlacementMod implements ModInitializer
+public class AccurateBlockPlacementMod implements ClientModInitializer
 {
 	public static Boolean disableNormalItemUse = false;
 	public static boolean isAccurateBlockPlacementEnabled = true;
@@ -21,7 +21,7 @@ public class AccurateBlockPlacementMod implements ModInitializer
 	public static MinecraftClient MC;
 	
 	@Override
-	public void onInitialize()
+	public void onInitializeClient()
 	{
 		MC = MinecraftClient.getInstance();
 
