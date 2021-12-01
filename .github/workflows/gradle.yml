@@ -1,14 +1,18 @@
 name: build
-on: [pull_request, push]
+on:
+  push:
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
 
 jobs:
   build:
     strategy:
       matrix:
         java: [
-          16 # Minimum supported by Minecraft
+          17, # Minimum supported by Minecraft
         ]
-        os: [ubuntu-20.04, windows-latest]
+        os: [ubuntu-20.04, windows-2022]
 
     runs-on: ${{ matrix.os }}
 
@@ -27,7 +31,7 @@ jobs:
       - name: build
         run: ./gradlew build
       # - name: capture build artifacts
-      #   if: ${{ runner.os == 'Linux' && matrix.java == '16' }}
+      #   if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
       #   uses: actions/upload-artifact@v2
       #   with:
       #     name: Artifacts
