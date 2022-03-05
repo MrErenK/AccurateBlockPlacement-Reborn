@@ -227,14 +227,14 @@ public abstract class GameRendererMixin
 		MinecraftClient client = MinecraftClient.getInstance();
 
 		// safety checks
-		if(client == null || client.options == null || client.options.keyUse == null || client.crosshairTarget == null
+		if(client == null || client.options == null || client.options.useKey == null || client.crosshairTarget == null
 				|| client.player == null || client.world == null || client.mouse == null || client.getWindow() == null) {
 			return;
 		}
 
 		// will be set to true only if needed
 		AccurateBlockPlacementMod.disableNormalItemUse = false;
-		IKeyBindingAccessor keyUseAccessor = (IKeyBindingAccessor) (Object) client.options.keyUse;
+		IKeyBindingAccessor keyUseAccessor = (IKeyBindingAccessor) (Object) client.options.useKey;
 		Boolean freshKeyPress = keyUseAccessor.accurateblockplacement_GetTimesPressed() > 0;
 
 		Item currentItem = getItemInUse(client);
@@ -295,7 +295,7 @@ public abstract class GameRendererMixin
 		// are they holding the use key and is the item to use a block?
 		// also is the the SAME item we started with if we are in repeat mode?
 		// note: check both freshKey and current state in cause of shitty frame rates
-		if((freshKeyPress || client.options.keyUse.isPressed())) {
+		if((freshKeyPress || client.options.useKey.isPressed())) {
 			// it's a block!! it's go time!
 			AccurateBlockPlacementMod.disableNormalItemUse = true;
 
@@ -379,7 +379,7 @@ public abstract class GameRendererMixin
 					// in case they manage to push the button multiple times per frame
 					// note: we already subtracted one from the press count earlier so the total
 					// should be the same
-					while(runOnceFlag || client.options.keyUse.wasPressed()) {
+					while(runOnceFlag || client.options.useKey.wasPressed()) {
 						// use item
 						clientAccessor.accurateblockplacement_DoItemUseBypassDisable();
 
