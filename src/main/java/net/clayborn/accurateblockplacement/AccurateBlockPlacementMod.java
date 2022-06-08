@@ -1,7 +1,5 @@
 package net.clayborn.accurateblockplacement;
 
-import java.util.UUID;
-
 import org.lwjgl.glfw.GLFW;
 
 import net.fabricmc.api.ClientModInitializer;
@@ -10,8 +8,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.network.MessageType;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.MutableText;
 
 public class AccurateBlockPlacementMod implements ClientModInitializer
 {
@@ -31,16 +28,16 @@ public class AccurateBlockPlacementMod implements ClientModInitializer
 		    while(keybind.wasPressed()) {
 				isAccurateBlockPlacementEnabled = !isAccurateBlockPlacementEnabled;
 				
-				TranslatableText message = null;
+				MutableText message = null;
 				
 				if(isAccurateBlockPlacementEnabled) {
-					message = new TranslatableText("net.clayborn.accurateblockplacement.modplacementmodemessage");
+					message = net.minecraft.text.Text.translatable("net.clayborn.accurateblockplacement.modplacementmodemessage");
 				}
 				else {
-					message = new TranslatableText("net.clayborn.accurateblockplacement.vanillaplacementmodemessage");
+					message = net.minecraft.text.Text.translatable("net.clayborn.accurateblockplacement.vanillaplacementmodemessage");
 				}
 				
-				MC.inGameHud.addChatMessage(MessageType.SYSTEM, message, UUID.fromString("00000000-0000-0000-0000-000000000000"));
+				MC.inGameHud.getChatHud().addMessage(message);
 			}
 		});
 	}
