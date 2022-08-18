@@ -23,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.MiningToolItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -34,7 +35,6 @@ import net.minecraft.world.World;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin
 {
-	private static final String itemUseOnBlockMethodName = getItemUseOnBlockMethodName();
 	private static final String blockActivateMethodName = getBlockActivateMethodName();
 	private static final String itemUseMethodName = getItemUseMethodName();
 
@@ -166,43 +166,6 @@ public abstract class GameRendererMixin
 		}
 	}
 
-	private static String getItemUseOnBlockMethodName()
-	{
-		Method[] methods = Item.class.getMethods();
-
-		for(Method method : methods) {
-			Class<?>[] types = method.getParameterTypes();
-
-			if(types.length != 1) {
-				continue;
-			}
-			if(types[0] != ItemUsageContext.class) {
-				continue;
-			}
-
-			return method.getName();
-		}
-
-		return null;
-	}
-
-	private Boolean doesItemHaveOverriddenUseOnBlockMethod(Item item)
-	{
-		if(itemUseOnBlockMethodName == null) {
-			System.out.println("[ERROR] itemUseOnBlockMethodName is null!");
-		}
-
-		// TODO: consider cache of results
-
-		try {
-			return !item.getClass().getMethod(itemUseOnBlockMethodName, ItemUsageContext.class).getDeclaringClass().equals(BlockItem.class);
-		}
-		catch(Exception e) {
-			System.out.println("[ERROR] Unable to find item " + item.getClass().getName() + " useOnBlock method!");
-			return false;
-		}
-	}
-
 	@Inject(method = "updateTargetedEntity", at = @At("RETURN"))
 	private void onUpdateTargetedEntityComplete(CallbackInfo info)
 	{
@@ -262,22 +225,22 @@ public abstract class GameRendererMixin
 			lastItemInUse = currentItem;
 		}
 
-		// nothing do it if nothing in hand.. let vanilla minecraft do it's normal flow
+		// if nothing in hand, let vanilla take over
 		if(currentItem == null)
 			return;
 
-		// this this item isn't a block, let vanilla take over
-		if(!(currentItem instanceof BlockItem))
+		// this this item isn't a block or a mining tool (axe, hoe, pickaxe, shovel), let vanilla take over
+		if(!(currentItem instanceof BlockItem) && !(currentItem instanceof MiningToolItem))
 			return;
 
-		Boolean isItemUsable = (currentItem.isFood() && !(currentItem instanceof AliasedBlockItem)) || doesItemHaveOverriddenUseMethod(currentItem) || doesItemHaveOverriddenUseOnBlockMethod(currentItem);
+		Boolean isItemUsable = (currentItem.isFood() && !(currentItem instanceof AliasedBlockItem)) || doesItemHaveOverriddenUseMethod(currentItem);
 
 		// if the item we are holding is activatable, let vanilla take over
 		if(isItemUsable) {
 			return;
 		}
 
-		// if we aren't looking a block (so we can place), let vanilla take over
+		// if we aren't looking at a block (so we can place), let vanilla take over
 		if(client.crosshairTarget.getType() != HitResult.Type.BLOCK) {
 			return;
 		}
@@ -315,7 +278,7 @@ public abstract class GameRendererMixin
 				facingAxisPlayerLastPos = lastPlayerPlacedBlockPos.getComponentAlongAxis(axis);
 				facingAxisLastPlacedPos = new Vec3d(lastPlacedBlockPos.getX(), lastPlacedBlockPos.getY(), lastPlacedBlockPos.getZ()).getComponentAlongAxis(axis);
 
-				// fixes placement being directional becouse getting the correct side pos is apparently too hard
+				// fixes placement being directional because getting the correct side pos is apparently too hard
 				if(targetPlacement.getSide().getName().equals("west") || targetPlacement.getSide().getName().equals("north")) {
 					facingAxisLastPlacedPos += 1.0d;
 				}

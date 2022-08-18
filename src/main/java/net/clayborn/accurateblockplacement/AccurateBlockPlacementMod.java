@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 public class AccurateBlockPlacementMod implements ClientModInitializer
@@ -30,16 +29,7 @@ public class AccurateBlockPlacementMod implements ClientModInitializer
 			while(keybind.wasPressed()) {
 				isAccurateBlockPlacementEnabled = !isAccurateBlockPlacementEnabled;
 				
-				MutableText message = null;
-				
-				if(isAccurateBlockPlacementEnabled) {
-					message = Text.translatable("net.clayborn.accurateblockplacement.modplacementmodemessage");
-				}
-				else {
-					message = Text.translatable("net.clayborn.accurateblockplacement.vanillaplacementmodemessage");
-				}
-				
-				MC.inGameHud.getChatHud().addMessage(message);
+				MC.inGameHud.getChatHud().addMessage(isAccurateBlockPlacementEnabled ? Text.translatable("net.clayborn.accurateblockplacement.modplacementmodemessage") : Text.translatable("net.clayborn.accurateblockplacement.vanillaplacementmodemessage"));
 			}
 		});
 	}
