@@ -7,7 +7,9 @@
 	"description": "Build at super speed with your bare hands!",
 	"authors": [
 		"Clayborn",
-		"Flourick",
+		"Flourick"
+	],
+	"contributors": [
 		"Andolamin"
 	],
 	"contact": {
@@ -29,8 +31,8 @@
 	],
 
 	"depends": {
-		"minecraft": "1.19.x",
-		"fabricloader": ">=0.14.7",
+		"minecraft": "1.19.2",
+		"fabricloader": ">=0.14.9",
 		"fabric": "*",
 		"java": ">=17"
 	}
