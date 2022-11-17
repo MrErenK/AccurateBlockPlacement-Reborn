@@ -172,26 +172,25 @@ public abstract class GameRendererMixin
 		if(!AccurateBlockPlacementMod.isAccurateBlockPlacementEnabled) {
 			// reset all state just in case
 			AccurateBlockPlacementMod.disableNormalItemUse = false;
-			
+
 			lastSeenBlockPos = null;
 			lastPlacedBlockPos = null;
 			lastPlayerPlacedBlockPos = null;
-			
+
 			autoRepeatWaitingOnCooldown = true;
 			backFillList.clear();
-			
+
 			lastFreshPressMouseRatio = null;
-			
+
 			lastItemInUse = null;
-			
+
 			return;
 		}
-		
+
 		MinecraftClient client = MinecraftClient.getInstance();
 
 		// safety checks
-		if(client == null || client.options == null || client.options.useKey == null || client.crosshairTarget == null
-				|| client.player == null || client.world == null || client.mouse == null || client.getWindow() == null) {
+		if(client == null || client.options == null || client.options.useKey == null || client.crosshairTarget == null || client.player == null || client.world == null || client.mouse == null || client.getWindow() == null) {
 			return;
 		}
 
@@ -226,22 +225,29 @@ public abstract class GameRendererMixin
 		}
 
 		// if nothing in hand, let vanilla take over
-		if(currentItem == null)
+		if(currentItem == null) {
 			return;
+		}
 
-		// this this item isn't a block or a mining tool (axe, hoe, pickaxe, shovel), let vanilla take over
-		if(!(currentItem instanceof BlockItem) && !(currentItem instanceof MiningToolItem))
+		// if the item isn't a block or a mining tool (axe, hoe, pickaxe, shovel), let vanilla take over
+		if(!(currentItem instanceof BlockItem) && !(currentItem instanceof MiningToolItem)) {
 			return;
-
-		Boolean isItemUsable = (currentItem.isFood() && !(currentItem instanceof AliasedBlockItem)) || doesItemHaveOverriddenUseMethod(currentItem);
+		}
 
 		// if the item we are holding is activatable, let vanilla take over
-		if(isItemUsable) {
+		if((currentItem.isFood() && !(currentItem instanceof AliasedBlockItem)) || doesItemHaveOverriddenUseMethod(currentItem)) {
 			return;
 		}
 
 		// if we aren't looking at a block (so we can place), let vanilla take over
 		if(client.crosshairTarget.getType() != HitResult.Type.BLOCK) {
+			return;
+		}
+
+		// check the other hand if it has something in use and if so let vanilla take over
+		Hand otherHand = handOfCurrentItemInUse == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
+		ItemStack otherHandItemStack = client.player.getStackInHand(otherHand);
+		if(!otherHandItemStack.isEmpty() && (otherHandItemStack.getItem().isFood() || doesItemHaveOverriddenUseMethod(otherHandItemStack.getItem())) && client.player.isUsingItem()) {
 			return;
 		}
 
@@ -322,16 +328,16 @@ public abstract class GameRendererMixin
 						autoRepeatWaitingOnCooldown = false;
 
 						HitResult currentHitResult = client.crosshairTarget;
-						
+
 						// try to place the backlog
 						for(HitResult prevHitResult : backFillList)	{
 							client.crosshairTarget = prevHitResult;
 							// use item
 							clientAccessor.accurateblockplacement_DoItemUseBypassDisable();
 						}
-						
+
 						backFillList.clear();
-						
+
 						client.crosshairTarget = currentHitResult;
 					}
 
