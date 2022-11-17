@@ -14,6 +14,7 @@ import net.clayborn.accurateblockplacement.IMinecraftClientAccessor;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerEntity;
@@ -253,11 +254,11 @@ public abstract class GameRendererMixin
 
 		BlockHitResult blockHitResult = (BlockHitResult) client.crosshairTarget;
 		BlockPos blockHitPos = blockHitResult.getBlockPos();
-		Boolean isTargetBlockActivatable = doesBlockHaveOverriddenActivateMethod(client.world.getBlockState(blockHitPos).getBlock());
+		Block targetBlock = client.world.getBlockState(blockHitPos).getBlock();
+		Boolean isTargetBlockActivatable = doesBlockHaveOverriddenActivateMethod(targetBlock);
 
-		// don't override behavior of clicking activatable blocks
-		// unless holding SNEAKING to replicate vanilla behaviors
-		if(isTargetBlockActivatable && !client.player.isSneaking()) {
+		// don't override behavior of clicking activatable blocks (and stairs) unless holding SNEAKING to replicate vanilla behaviors
+		if(isTargetBlockActivatable && !(targetBlock instanceof StairsBlock) && !client.player.isSneaking()) {
 			return;
 		}
 
@@ -308,7 +309,7 @@ public abstract class GameRendererMixin
 				&& (lastPlacedBlockPos == null || !lastPlacedBlockPos.equals(blockHitPos)))
 				|| (lastPlacedBlockPos != null && lastPlayerPlacedBlockPos != null
 					&& lastPlacedBlockPos.equals(blockHitPos)
-					&& Math.abs(facingAxisPlayerLastPos - facingAxisPlayerPos) >= 0.99d // becouse precision
+					&& Math.abs(facingAxisPlayerLastPos - facingAxisPlayerPos) >= 0.99d // because precision
 					&& Math.abs(facingAxisPlayerLastPos - facingAxisLastPlacedPos) < Math.abs(facingAxisPlayerPos - facingAxisLastPlacedPos));
 
 			Boolean hasMouseMoved = (currentMouseRatio != null && lastFreshPressMouseRatio != null && lastFreshPressMouseRatio.distanceTo(currentMouseRatio) >= 0.1);
