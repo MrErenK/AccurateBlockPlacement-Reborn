@@ -20,7 +20,7 @@
 	"license": "MIT",
 	"icon": "assets/accurateblockplacement/icon.png",
 	"environment": "client",
-	
+
 	"entrypoints": {
 		"client": [
 			"net.clayborn.accurateblockplacement.AccurateBlockPlacementMod"
@@ -31,8 +31,8 @@
 	],
 
 	"depends": {
-		"minecraft": "1.19.2",
-		"fabricloader": ">=0.14.9",
+		"minecraft": "~1.19.3",
+		"fabricloader": ">=0.14.11",
 		"fabric": "*",
 		"java": ">=17"
 	}

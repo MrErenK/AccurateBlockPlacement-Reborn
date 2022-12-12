@@ -4,6 +4,12 @@ build/
 out/
 classes/
 
+# java
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+
 # idea
 .idea/
 *.iml
