@@ -263,7 +263,7 @@ public abstract class GameRendererMixin
 		}
 
 		// are they holding the use key and is the item to use a block?
-		// also is the the SAME item we started with if we are in repeat mode?
+		// also is the SAME item we started with if we are in repeat mode?
 		// note: check both freshKey and current state in cause of shitty frame rates
 		if((freshKeyPress || client.options.useKey.isPressed())) {
 			// it's a block!! it's go time!
