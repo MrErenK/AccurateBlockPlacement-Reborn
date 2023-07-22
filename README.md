@@ -1,11 +1,21 @@
-# Accurate Block Placement
+# Accurate Block Placement Reborn
+[Modrinth Page](https://modrinth.com/mod/accurate-block-placement-reborn)
 
-A simple fabric mod for Minecraft which causes players to place blocks based on what they are looking at rather than a timer.
+[CurseForge Page](https://legacy.curseforge.com/minecraft/mc-mods/accurate-block-placement-reborn)
 
-## Installation
+This fork adds support for versions 1.19.4-1.20.1
+The version numbers are continuing from the original [Accurate Block Placement](https://legacy.curseforge.com/minecraft/mc-mods/accurate-block-placement) mod.
+This is a client side mod made for [Fabric](https://fabricmc.net) but also works with [Quilt](https://quiltmc.org). 
+[Fabric API](https://modrinth.com/mod/fabric-api) is required.
 
-1. Download fabric loader from [here](https://fabricmc.net/use/) (**REQUIRES** Fabric-API! Get it [here](https://www.curseforge.com/minecraft/mc-mods/fabric-api) (Make sure you get the right one for your version!))
+**[WARNING]** This mod could get you banned on some servers with anti-cheats!
+>This includes (but is not whatsoever limited to) Hypixel & most competitive servers.
 
-2. Download AccurateBlockPlacement jar release from [here](https://github.com/Flourick/AccurateBlockPlacement/releases).
+In vanilla Minecraft, if you hold right-click with blocks, the game will place a block every 4 ticks. This means that if you try to place a row of blocks, you might miss some blocks or place too many. This mod fixes both problems, as seen in the GIF below.
+You can set a keybind to toggle this mod on or off.
+![Mod Showcase](https://cdn-raw.modrinth.com/data/kzwxhsjp/images/94a4de623aca8c5afdc07edca76ed663127d93b2.gif)
 
-3. Once you run fabric loader a mods folder will be created in your *.minecraft* directory. Move the `accurate-block-placement-*.jar` and `fabric-api-*.jar` there.
+**NOTE:**
+This mod is not to be confused with the [Tweakeroo](https://legacy.curseforge.com/minecraft/mc-mods/tweakeroo)/[Carpet](https://modrinth.com/mod/carpet) feature of the same name, which is a completely different thing. 
+
+There is another mod called [Precise Block Placing](https://legacy.curseforge.com/minecraft/mc-mods/preciseblockplacing) which has a similar goal to this mod, but works very differently.
