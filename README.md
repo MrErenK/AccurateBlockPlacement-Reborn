@@ -17,5 +17,3 @@ You can set a keybind to toggle this mod on or off.
 
 **NOTE:**
 This mod is not to be confused with the [Tweakeroo](https://legacy.curseforge.com/minecraft/mc-mods/tweakeroo)/[Carpet](https://modrinth.com/mod/carpet) feature of the same name, which is a completely different thing. 
-
-There is another mod called [Precise Block Placing](https://legacy.curseforge.com/minecraft/mc-mods/preciseblockplacing) which has a similar goal to this mod, but works very differently.
