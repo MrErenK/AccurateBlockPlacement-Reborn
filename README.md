@@ -3,7 +3,7 @@
 
 [CurseForge Page](https://legacy.curseforge.com/minecraft/mc-mods/accurate-block-placement-reborn)
 
-This fork adds support for versions 1.19-1.20.2
+This fork adds support for versions 1.19-1.20.4
 The version numbers are continuing from the original [Accurate Block Placement](https://legacy.curseforge.com/minecraft/mc-mods/accurate-block-placement) mod.
 This is a client side mod made for [Fabric](https://fabricmc.net) but also works with [Quilt](https://quiltmc.org). 
 [Fabric API](https://modrinth.com/mod/fabric-api) is required.
