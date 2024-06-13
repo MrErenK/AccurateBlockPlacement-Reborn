@@ -13,6 +13,7 @@ This is a client side mod made for [Fabric](https://fabricmc.net) but also works
 
 In vanilla Minecraft, if you hold right-click with blocks, the game will place a block every 4 ticks. This means that if you try to place a row of blocks, you might miss some blocks or place too many. This mod fixes both problems, as seen in the GIF below.
 You can set a keybind to toggle this mod on or off.
+
 ![Mod Showcase](https://cdn-raw.modrinth.com/data/kzwxhsjp/images/94a4de623aca8c5afdc07edca76ed663127d93b2.gif)
 
 **NOTE:**
