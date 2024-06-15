@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.Hand;
@@ -19,6 +20,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -154,8 +156,8 @@ public abstract class GameRendererMixin
 		}
 	}
 
-	@Inject(at = @org.spongepowered.asm.mixin.injection.At("HEAD"), method = "render")
-	private void render(CallbackInfo info)
+	@Inject(method = "updateCrosshairTarget", at = @At("RETURN"))
+	private void onUpdateTargetedEntityComplete(CallbackInfo info)
 	{
 		if(!AccurateBlockPlacementMod.isAccurateBlockPlacementEnabled) {
 			// reset all state just in case
@@ -222,7 +224,10 @@ public abstract class GameRendererMixin
 			return;
 		}
 
-		// TODO: Add if the item we are holding is activatable, let vanilla take over
+		// if the item we are holding is activatable, let vanilla take over
+		if((currentItem.getDefaultStack().contains(DataComponentTypes.FOOD) && !(currentItem instanceof AliasedBlockItem)) || doesItemHaveOverriddenUseMethod(currentItem)) {
+			return;
+		}
 
         // if we aren't looking at a block (so we can place), let vanilla take over
 		if(client.crosshairTarget.getType() != HitResult.Type.BLOCK) {
@@ -232,7 +237,7 @@ public abstract class GameRendererMixin
 		// check the other hand if it has something in use and if so let vanilla take over
 		Hand otherHand = handOfCurrentItemInUse == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
 		ItemStack otherHandItemStack = client.player.getStackInHand(otherHand);
-		if(!otherHandItemStack.isEmpty() && (doesItemHaveOverriddenUseMethod(otherHandItemStack.getItem())) && client.player.isUsingItem()) {
+		if(!otherHandItemStack.isEmpty() && (otherHandItemStack.getItem().getDefaultStack().contains(DataComponentTypes.FOOD) || doesItemHaveOverriddenUseMethod(otherHandItemStack.getItem())) && client.player.isUsingItem()) {
 			return;
 		}
 
